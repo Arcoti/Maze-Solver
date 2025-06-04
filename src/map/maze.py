@@ -4,6 +4,7 @@ from typing import Iterator
 
 from .square import Square
 from .role import Role
+from .border import Border
 
 @dataclass(frozen=True)
 class Maze:
@@ -43,9 +44,9 @@ class Maze:
         assert [square.index for square in self] == list(range(len(self.squares))), "Wrong square indices."
 
     def validateRowsCols(self):
-        for x in range(self.width):
-            for y in range(self.height):
-                square = self[y * self.width + x]
+        for x in range(self.height):
+            for y in range(self.width):
+                square = self[x * self.width + y]
                 assert square.coordinate[0] == x, "Wrong x coordinate."
                 assert square.coordinate[1] == y, "Wrong y coordinate."
     
