@@ -3,10 +3,17 @@ from functools import cached_property
 from typing import Iterator
 
 from .square import Square
+from .role import Role
 
 @dataclass(frozen=True)
 class Maze:
     squares: tuple[Square, ...]
+
+    def __post_init__(self):
+        self.validateIndices()
+        self.validateRowsCols()
+        self.validateEntrance()
+        self.validateExit()
 
     # Enable usage of for or while loop
     def __iter__(self) -> Iterator[Square]:
@@ -23,3 +30,19 @@ class Maze:
     @cached_property
     def height(self):
         return max(square.coordinate[0] for square in self.squares) + 1 # Add 1 to take into account 0 based numbering
+    
+    def validateIndices(self):
+        assert [square.index for square in self.squares] == list(range(len(self.squares))), "Wrong square indices."
+
+    def validateRowsCols(self):
+        for x in range(self.width):
+            for y in range(self.height):
+                square = self.squares[y * self.width + x]
+                assert square.coordinate[0] == x, "Wrong x coordinate."
+                assert square.coordinate[1] == y, "Wrong y coordinate."
+    
+    def validateEntrance(self):
+        assert any(square.role == Role.ENTRANCE for square in self.squares) == True, "There must be at least one entrance."
+    
+    def validateExit(self):
+        return any(square.role == Role.EXIT for square in self.squares), "There must be at least one exit."
