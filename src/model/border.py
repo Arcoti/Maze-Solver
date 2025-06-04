@@ -21,5 +21,5 @@ class Border(IntFlag):
         )
 
     @property
-    def intersection(self) -> bool:
+    def intersection(self) -> bool: # Find squares which has more than two pathways (e.g. a T junction or a cross road)
         return self.bit_count() < 2
