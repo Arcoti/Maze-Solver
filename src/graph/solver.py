@@ -3,7 +3,12 @@ import math
 from .edge import Node
 from .edge import Edge
 from .vertex import Vertex
+from .convertor import Convertor
 from ..model.role import Role
+from ..model.maze import Maze
+
+from ..model.square import Square # For main function, delete when not needed
+from ..model.border import Border # For main function, delete when not needed
 
 class Solver():
 
@@ -18,11 +23,11 @@ class Solver():
 
     @classmethod
     def getEntrances(cls, vertices):
-        return set(vertex.role == Role.ENTRANCE for vertex in vertices)
+        return set(vertex for vertex in vertices if vertex.role == Role.ENTRANCE)
     
     @classmethod
     def getExits(cls, vertices):
-        return set(vertex.role == Role.EXIT for vertex in vertices)
+        return set(vertex for vertex in vertices if vertex.role == Role.EXIT)
     
     @classmethod
     def getEdges(cls, edges: set[Edge], target: tuple[int, int]):
@@ -90,7 +95,9 @@ class Solver():
         return path, distance    
     
     @classmethod
-    def findShortestPath(cls, nodes: set[Node], edges: set[Edge]):
+    def findShortestPath(cls, maze: Maze):
+        nodes, edges = Convertor.convertToGraph(maze)
+
         vertices = cls.initializeVertices(nodes)
 
         entrances = cls.getEntrances(vertices)
@@ -107,3 +114,25 @@ class Solver():
                 shortestDist = dist
         
         return shortestPath
+
+    
+if __name__ == "__main__":
+    maze = Maze(
+        squares=(
+            Square(0, (0, 0), Border.NORTH | Border.WEST),
+            Square(1, (0, 1), Border.NORTH | Border.EAST),
+            Square(2, (0, 2), Border.WEST | Border.EAST, Role.EXIT),
+            Square(3, (0, 3), Border.NORTH | Border.WEST | Border.EAST),
+            Square(4, (1, 0), Border.SOUTH | Border.WEST | Border.EAST),
+            Square(5, (1, 1), Border.WEST | Border.EAST),
+            Square(6, (1, 2), Border.SOUTH | Border.WEST),
+            Square(7, (1, 3), Border.EAST),
+            Square(8, (2, 0), Border.NORTH | Border.WEST, Role.ENTRANCE),
+            Square(9, (2, 1), Border.SOUTH),
+            Square(10, (2, 2), Border.NORTH | Border.SOUTH),
+            Square(11, (2, 3), Border.SOUTH | Border.EAST),
+        )
+    )
+
+    path = Solver.findShortestPath(maze)
+    print(path)
