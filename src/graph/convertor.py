@@ -50,3 +50,7 @@ class Convertor:
                     break
         
         return cls.edges
+    
+    @classmethod
+    def convertToGraph(cls, maze: Maze):
+        return (cls.getNodes(maze), cls.getEdges(maze))
