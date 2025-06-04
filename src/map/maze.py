@@ -31,18 +31,26 @@ class Maze:
     def height(self):
         return max(square.coordinate[0] for square in self.squares) + 1 # Add 1 to take into account 0 based numbering
     
+    @cached_property
+    def entrance(self):
+        return next(square for square in self if square.role == Role.ENTRANCE)
+    
+    @cached_property
+    def exit(self):
+        return next(square for square in self if square.role == Role.EXIT)
+    
     def validateIndices(self):
-        assert [square.index for square in self.squares] == list(range(len(self.squares))), "Wrong square indices."
+        assert [square.index for square in self] == list(range(len(self.squares))), "Wrong square indices."
 
     def validateRowsCols(self):
         for x in range(self.width):
             for y in range(self.height):
-                square = self.squares[y * self.width + x]
+                square = self[y * self.width + x]
                 assert square.coordinate[0] == x, "Wrong x coordinate."
                 assert square.coordinate[1] == y, "Wrong y coordinate."
     
     def validateEntrance(self):
-        assert any(square.role == Role.ENTRANCE for square in self.squares) == True, "There must be at least one entrance."
+        assert any(square.role == Role.ENTRANCE for square in self) == True, "There must be at least one entrance."
     
     def validateExit(self):
-        return any(square.role == Role.EXIT for square in self.squares), "There must be at least one exit."
+        return any(square.role == Role.EXIT for square in self), "There must be at least one exit."
