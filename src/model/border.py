@@ -4,8 +4,8 @@ class Border(IntFlag):
     EMPTY = 0
     NORTH = auto()
     SOUTH = auto()
-    EAST = auto()
-    WEST = auto()
+    EAST = auto() # Right
+    WEST = auto() # Left
 
     @property
     def deadend(self) -> bool:
