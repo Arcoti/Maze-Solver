@@ -1,4 +1,3 @@
-from collections import defaultdict
 import math
 
 from .edge import Node
