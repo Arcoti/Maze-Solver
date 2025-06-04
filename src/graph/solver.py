@@ -77,3 +77,33 @@ class Solver():
 
             # Update source
             source = nextDestination
+        
+        # When loop ends, source is now one of the exits
+        path = []
+        current = source
+        while current.prev is not None:
+            path.append(current.node)
+            current = current.prev
+        path = path[::-1]
+        distance = source.dist
+
+        return path, distance    
+    
+    @classmethod
+    def findShortestPath(cls, nodes: set[Node], edges: set[Edge]):
+        vertices = cls.initializeVertices(nodes)
+
+        entrances = cls.getEntrances(vertices)
+        exits = cls.getExits(vertices)
+
+        shortestPath = []
+        shortestDist = float('inf')
+
+        for entrance in entrances:
+            path, dist = cls.solve(entrance, exits, vertices, edges)
+
+            if dist < shortestDist:
+                shortestPath = path
+                shortestDist = dist
+        
+        return shortestPath
