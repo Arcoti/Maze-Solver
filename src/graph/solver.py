@@ -6,6 +6,7 @@ from .vertex import Vertex
 from .convertor import Convertor
 from ..model.role import Role
 from ..model.maze import Maze
+from ..model.solution import Solution
 
 from ..model.square import Square # For main function, delete when not needed
 from ..model.border import Border # For main function, delete when not needed
@@ -136,7 +137,7 @@ class Solver():
                 shortestPath = path
                 shortestDist = dist
         
-        return shortestPath
+        return Solution(tuple(shortestPath))
 
     
 if __name__ == "__main__":
