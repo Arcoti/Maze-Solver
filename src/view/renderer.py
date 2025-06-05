@@ -43,7 +43,7 @@ class SVG:
     def preview(self) -> None:
         # Create temporary file with .html suffix
         with tempfile.NamedTemporaryFile(
-            mode="w", encoding="utf-8", suffix="html", delete=False # to prevent automatic deleting
+            mode="w", encoding="utf-8", suffix=".html", delete=False # to prevent automatic deleting
         ) as file:
             file.write(self.htmlContent)
         webbrowser.open(f"file://{file.name}") # display the rendered SVG image
@@ -74,7 +74,7 @@ class SVGRenderer:
             tag(
                 "svg",
                 self._getBody(maze, solution),
-                xmlns="http://www.mazesolver.com",
+                xmlns="http://www.w3.org/2000/svg", # Official svg namespace, informs how to interpret the tags
                 stroke_linejoin="round",
                 width=width,
                 height=height,
