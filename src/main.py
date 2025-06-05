@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from .model.maze import Maze
@@ -6,6 +7,7 @@ from .model.square import Square
 from .model.border import Border
 from .graph.solver import Solver
 from .view.renderer import SVGRenderer
+from .persistence.serializer import dump, load
 
 if __name__ == "__main__":
     maze = Maze(
@@ -24,6 +26,12 @@ if __name__ == "__main__":
             Square(11, (2, 3), Border.SOUTH | Border.EAST),
         )   
     )
+    
+    currentDirectory = os.getcwd()
+    filePath = currentDirectory + "\\static\\miniature.maze"
+
+    dump(maze, Path(filePath))
+    maze = load(Path(filePath))
 
     solution = Solver.findShortestPath(maze)
     renderer = SVGRenderer()
