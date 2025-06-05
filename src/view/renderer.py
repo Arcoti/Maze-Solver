@@ -43,7 +43,7 @@ class SVG:
     def preview(self) -> None:
         # Create temporary file with .html suffix
         with tempfile.NamedTemporaryFile(
-            mode="w", encoding="utf-8", suffix="html", delete=False # to prevent automatic deleting
+            mode="w", encoding="utf-8", suffix=".html", delete=False # to prevent automatic deleting
         ) as file:
             file.write(self.htmlContent)
         webbrowser.open(f"file://{file.name}") # display the rendered SVG image
