@@ -4,7 +4,6 @@ from typing import Iterator
 
 from .square import Square
 from .role import Role
-from .border import Border
 
 @dataclass(frozen=True)
 class Maze:
@@ -55,21 +54,3 @@ class Maze:
     
     def validateExit(self):
         return any(square.role == Role.EXIT for square in self), "There must be at least one exit."
-    
-if __name__ == "__main__":
-    maze = Maze(
-        squares=(
-            Square(0, (0, 0), Border.NORTH | Border.WEST),
-            Square(1, (0, 1), Border.NORTH | Border.EAST),
-            Square(2, (0, 2), Border.WEST | Border.EAST, Role.EXIT),
-            Square(3, (0, 3), Border.NORTH | Border.WEST | Border.EAST),
-            Square(4, (1, 0), Border.SOUTH | Border.WEST | Border.EAST),
-            Square(5, (1, 1), Border.WEST | Border.EAST),
-            Square(6, (1, 2), Border.SOUTH | Border.WEST),
-            Square(7, (1, 3), Border.EAST),
-            Square(8, (2, 0), Border.NORTH | Border.WEST, Role.ENTRANCE),
-            Square(9, (2, 1), Border.SOUTH),
-            Square(10, (2, 2), Border.NORTH | Border.SOUTH),
-            Square(11, (2, 3), Border.SOUTH | Border.EAST),
-        )
-    )

@@ -44,6 +44,11 @@ class SVGRenderer:
             tag(
                 "svg",
                 self._getBody(maze, solution),
+                xmlns="http://www.mazesolver.com",
+                stroke_linejoin="round",
+                width=width,
+                height=height,
+                viewBox=f"0 0 {width} {height}",
             )
         )
     
