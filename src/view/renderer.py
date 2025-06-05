@@ -74,7 +74,7 @@ class SVGRenderer:
             tag(
                 "svg",
                 self._getBody(maze, solution),
-                xmlns="http://www.mazesolver.com",
+                xmlns="http://www.w3.org/2000/svg", # Official svg namespace, informs how to interpret the tags
                 stroke_linejoin="round",
                 width=width,
                 height=height,
