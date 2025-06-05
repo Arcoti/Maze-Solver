@@ -1,3 +1,6 @@
+import tempfile
+import textwrap
+import webbrowser
 from dataclasses import dataclass
 
 from ..model.maze import Maze
@@ -17,6 +20,33 @@ ROLEEMOJI = {
 @dataclass(frozen=True)
 class SVG:
     xmlContent: str
+
+    @property
+    def htmlContent(self) -> str:
+        return textwrap.dedent("""\
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="utf-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <title> SVG Preview </title>
+            </head>
+            <body>
+            {0}                   
+            </body>
+            </html>
+        """).format(self.xmlContent)
+        # dedent -> remove prior whitespaces
+        # {0} -> Use positional placeholder
+        # format -> replace {0} with self.xmlContent
+    
+    def preview(self) -> None:
+        # Create temporary file with .html suffix
+        with tempfile.NamedTemporaryFile(
+            mode="w", encoding="utf-8", suffix="html", delete=False # to prevent automatic deleting
+        ) as file:
+            file.write(self.htmlContent)
+        webbrowser.open(f"file://{file.name}") # display the rendered SVG image
 
 @dataclass(frozen=True)
 class SVGRenderer:

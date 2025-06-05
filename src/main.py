@@ -26,7 +26,11 @@ if __name__ == "__main__":
     )
 
     solution = Solver.findShortestPath(maze)
-    svg = SVGRenderer().render(maze, solution)
+    renderer = SVGRenderer()
+    svg = renderer.render(maze, solution)
 
     with Path("maze.svg").open(mode="w", encoding="utf-8") as file:
         file.write(svg.xmlContent)
+
+    renderer.render(maze).preview()
+    renderer.render(maze, solution).preview()
