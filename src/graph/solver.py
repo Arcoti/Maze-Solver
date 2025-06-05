@@ -1,5 +1,7 @@
+import copy
 import math
 from collections import deque
+import time
 
 from .edge import Node
 from .edge import Edge
@@ -33,10 +35,6 @@ class Solver():
     @classmethod
     def getEdges(cls, edges: set[Edge], target: tuple[int, int]):
         return filter(lambda edge : edge.source.coordinate == target or edge.destination.coordinate == target, edges)
-
-    @classmethod
-    def calculateDistance(cls, point1: tuple[int, int], point2: tuple[int, int]):
-        return math.sqrt(sum((a - b) ** 2 for a, b in zip(point1, point2)))
     
     @classmethod
     def getDestination(cls, cord: tuple[int, int], vertices: set[Vertex]):
@@ -72,8 +70,8 @@ class Solver():
                 else:
                     travellingTo = relatedEdge.source.coordinate
             
-                # Calculate the distance
-                distance = cls.calculateDistance(source.coordinate, travellingTo)
+                # Get the distance
+                distance = relatedEdge.distance
 
                 # Get the vertex of the destination base on the coordinates and add it to places
                 destination = cls.getDestination(travellingTo, vertices)
@@ -90,10 +88,9 @@ class Solver():
             index = 0
             nextDestination = None
             while index < len(destinations):
-                nextDestination = destinations[index]
 
-                # If nextDestination hasn't been explored, explore the place
-                if nextDestination not in explored:
+                if destinations[index] not in explored:
+                    nextDestination = destinations[index]
                     explored.add(nextDestination)
                     break
 
@@ -132,6 +129,10 @@ class Solver():
         shortestDist = float('inf')
 
         for entrance in entrances:
+            # Reset Vertices
+            for vertice in vertices:
+                vertice.reset()
+
             path, dist = cls.solve(entrance, exits, vertices, edges)
 
             if dist < shortestDist:
@@ -147,7 +148,7 @@ if __name__ == "__main__":
             Square(0, (0, 0), Border.NORTH | Border.WEST),
             Square(1, (0, 1), Border.NORTH | Border.EAST),
             Square(2, (0, 2), Border.WEST | Border.EAST, Role.EXIT),
-            Square(3, (0, 3), Border.NORTH | Border.WEST | Border.EAST),
+            Square(3, (0, 3), Border.NORTH | Border.WEST | Border.EAST), 
             Square(4, (1, 0), Border.SOUTH | Border.WEST | Border.EAST),
             Square(5, (1, 1), Border.WEST | Border.EAST),
             Square(6, (1, 2), Border.SOUTH | Border.WEST),

@@ -17,3 +17,7 @@ class Vertex():
     @property
     def isIntersection(self):
         return self.node.border.intersection
+    
+    def reset(self):
+        self.dist = float('inf')
+        self.prev = None
