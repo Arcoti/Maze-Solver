@@ -117,7 +117,7 @@ class SVGRenderer:
             ]
         ).draw(
             stroke_width = self.lineWidth // 2,
-            strok_opacity = "50%",
+            stroke_opacity = "50%",
             stroke = "red",
             fill = "none",
             marker_end = "url(#arrow)",
