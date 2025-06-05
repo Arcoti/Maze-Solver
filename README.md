@@ -35,7 +35,7 @@ Then, after you are done, deactivate the python virtual environment.
 deactivate
 ```
 
-## Acknowledgement
+## Acknowledgements
 
 I would like to express my thanks to the follownig resources:
 - [Build a Maze Solver in Python Using Graphs](https://realpython.com/python-maze-solver/): For providing inspiration and guidance for this project
