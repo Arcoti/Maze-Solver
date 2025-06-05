@@ -13,3 +13,7 @@ class Vertex():
     @property
     def coordinate(self):
         return self.node.coordinate
+    
+    @property
+    def isIntersection(self):
+        return self.node.border.intersection

@@ -1,4 +1,5 @@
 import math
+from collections import deque
 
 from .edge import Node
 from .edge import Edge
@@ -49,8 +50,15 @@ class Solver():
         # Initialize unexplored vertices
         explored = set([entrance])
 
+        # Initialize empty stack
+        stack = deque()
+
         source = entrance
         while exits.isdisjoint(explored):
+            # Store all the previously visited intersections
+            if source.role != Role.ENTRANCE and source.isIntersection:
+                stack.append(source)
+
             # Get all the edges whose source or destination is the entrance
             relatedEdges = cls.getEdges(edges, source.coordinate)
 
@@ -76,9 +84,26 @@ class Solver():
                     destination.dist = source.dist + distance
                     destination.prev = source
             
-            # Find the next destination whose distance should be the minimum out of all possible places
-            nextDestination = min(places, key=lambda p : p.dist)
-            explored.add(nextDestination)
+            # Find the next destination whose distance should be the minimum out of all possible non-visited places
+            destinations = sorted(places, key = lambda d : d.dist)
+
+            index = 0
+            nextDestination = None
+            while index < len(destinations):
+                nextDestination = destinations[index]
+
+                # If nextDestination hasn't been explored, explore the place
+                if nextDestination not in explored:
+                    explored.add(nextDestination)
+                    break
+
+                index += 1
+            
+            if nextDestination is None:
+                if len(stack) == 0: # Check if stack is empty
+                    return [], float('inf')
+                
+                nextDestination = stack.pop()
 
             # Update source
             source = nextDestination
@@ -86,13 +111,13 @@ class Solver():
         # When loop ends, source is now one of the exits
         path = []
         current = source
-        while current.prev is not None:
+        while current is not None:
             path.append(current.node)
             current = current.prev
         path = path[::-1]
         distance = source.dist
 
-        return path, distance    
+        return path, distance
     
     @classmethod
     def findShortestPath(cls, maze: Maze):
@@ -135,4 +160,6 @@ if __name__ == "__main__":
     )
 
     path = Solver.findShortestPath(maze)
-    print(path)
+    for stop in path:
+        print(stop.coordinate, end = ' -> ')
+    print("Out")
