@@ -33,12 +33,17 @@ if __name__ == "__main__":
     dump(maze, Path(filePath))
     maze = load(Path(filePath))
 
+    # Solve the maze
     solution = Solver.findShortestPath(maze)
+
+    # Render the maze solution
     renderer = SVGRenderer()
     svg = renderer.render(maze, solution)
 
+    # Save the maze solution as an svg file
     with Path("static/maze.svg").open(mode="w", encoding="utf-8") as file:
         file.write(svg.xmlContent)
 
+    # Offer previw
     renderer.render(maze).preview()
     renderer.render(maze, solution).preview()
