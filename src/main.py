@@ -29,7 +29,7 @@ if __name__ == "__main__":
     renderer = SVGRenderer()
     svg = renderer.render(maze, solution)
 
-    with Path("maze.svg").open(mode="w", encoding="utf-8") as file:
+    with Path("static/maze.svg").open(mode="w", encoding="utf-8") as file:
         file.write(svg.xmlContent)
 
     renderer.render(maze).preview()
