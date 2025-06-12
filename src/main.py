@@ -1,13 +1,9 @@
 import os
 from pathlib import Path
 
-from .model.maze import Maze
-from .model.role import Role
-from .model.square import Square
-from .model.border import Border
 from .graph.solver import Solver
 from .view.renderer import SVGRenderer
-from .persistence.serializer import dump, load
+from .persistence.serializer import load
 
 if __name__ == "__main__":
     currentDirectory = os.getcwd()

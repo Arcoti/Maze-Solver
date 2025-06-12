@@ -42,7 +42,7 @@ class Polygon(tuple[Point, ...]):
 
 class DisjointLines(tuple[Line, ...]):
     def draw(self, **attributes) -> str:
-        return "".join(line.draw() for line in self)
+        return "".join(line.draw(**attributes) for line in self)
 
 @dataclass(frozen=True)
 class Rect:
