@@ -19,7 +19,7 @@ Run the code. You may then view the results in `maze.svg` under the `static` fol
 python -m src.main
 ```
 
-After you are done, you may deactivate your virtual environment. 
+Upon completion, you may deactivate your virtual environment. 
 ```
 deactivate
 ```
