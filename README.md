@@ -30,7 +30,7 @@ The project successfully takes in the binary file labelled `miniature.maze` in `
 
 A sample output of the program is shown below: 
 
-
+![Sample Output](./static/sample_output.png)
 
 ## Acknowledgements
 
