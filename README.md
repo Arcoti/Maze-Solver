@@ -35,5 +35,5 @@ A sample output of the program is shown below:
 ## Acknowledgements
 
 I would like to express my thanks to the follownig resources:
-- [Build a Maze Solver in Python Using Graphs](https://realpython.com/python-maze-solver/): For providing inspiration and guidance for this project
-- [How Dijkstra's Algorithm Works](https://www.youtube.com/watch?v=EFg3u_E6eHU): For helping me to understand Dijkstra's Algorithm
+- [Build a Maze Solver in Python Using Graphs](https://realpython.com/python-maze-solver/)
+- [How Dijkstra's Algorithm Works](https://www.youtube.com/watch?v=EFg3u_E6eHU)
