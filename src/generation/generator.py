@@ -2,8 +2,6 @@ from numpy import random
 from .cell import Cell
 from .direction import Direction
 
-import time
-
 class Generator:
 
     @staticmethod
