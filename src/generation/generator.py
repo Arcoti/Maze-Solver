@@ -1,6 +1,8 @@
 from numpy import random
-from cell import Cell
-from direction import Direction
+from .cell import Cell
+from .direction import Direction
+
+import time
 
 class Generator:
 
@@ -16,10 +18,30 @@ class Generator:
         return neighbours
     
     @staticmethod
-    def updateMaze(current: "Cell", maze: set["Cell"], cells: list["Cell"]):
+    def updateMaze(current: "Cell", maze: set["Cell"], unvisited: list["Cell"]):
         maze.add(current)
-        cells.remove(current)
-    
+        if current in unvisited:
+            unvisited.remove(current)
+
+    @staticmethod
+    def updateDirection(current: "Cell", next: "Cell"):
+        diff = (current.coordinate[0] - next.coordinate[0], current.coordinate[1] - next.coordinate[1])
+
+        match = {
+            (0, 1): Direction.NORTH,
+            (0, -1): Direction.SOUTH,
+            (1, 0): Direction.EAST,
+            (-1, 0): Direction.WEST
+        }
+
+        current.direction = match[diff]
+
+    @staticmethod
+    def randomChoice(sample: list["Cell"]) -> "Cell":
+        rng = random.default_rng()
+        index = rng.choice(range(len(sample)))
+        return sample[index]
+
     @staticmethod
     def generateMaze(rows: int, cols: int):
         '''
@@ -39,22 +61,23 @@ class Generator:
                     add current cell to path
         '''
         # Generate maze
-        maze = set()
+        maze: set["Cell"] = set()
 
         # Create a path
         path = []
 
         # Generate cells
         cells = Generator.generateCells(rows, cols)
+        unvisited = cells.copy()
 
         # Select a random cell and add it to the maze
-        selected = random.choice(cells)
+        selected = Generator.randomChoice(unvisited)
         maze.add(selected)
-        cells.remove(selected)
+        unvisited.remove(selected)
 
-        while len(cells) != 0:
-            # Select a random cell
-            current = random.choice(cells)
+        while len(unvisited) != 0:
+            # Select a unvisited random cell
+            current = Generator.randomChoice(unvisited)
 
             # Add new cell to the path
             path.append(current)
@@ -63,10 +86,11 @@ class Generator:
             while current not in maze:
                 # Randomly select a neighbouring cell
                 neighbours = Generator.getNeighbouringCells(current, rows, cols, cells)
-                current = random.choice(neighbours)
+                next = Generator.randomChoice(neighbours)
 
                 # Update cell direction
-                ...
+                Generator.updateDirection(current, next)
+                current = next
 
                 if current in set(path):
                     # Remove the loop
@@ -77,9 +101,12 @@ class Generator:
                     path.append(current)
         
             # Add the path to the maze
-            [Generator.updateMaze(cell, maze, cells) for cell in path]
+            [Generator.updateMaze(cell, maze, unvisited) for cell in path]
 
             # Reset the path
             path = []
     
         return maze
+    
+if __name__ == "__main__":
+    Generator.generateMaze(4, 4)
