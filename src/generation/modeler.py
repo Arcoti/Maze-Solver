@@ -1,7 +1,11 @@
+import os
+import pathlib
+
 from .cell import Cell, Transit
 from .direction import Direction
 from ..model.border import Border
 from ..model.square import Square
+from ..persistence.serializer import dump
 
 from .generator import Generator
 from ..model.maze import Maze
@@ -48,7 +52,7 @@ class Modeler:
             nextCell[1].border = nextCell[1].border & ~target
 
     @staticmethod
-    def generateSquareAttri(maze: set["Cell"]) -> list["Transit"]:
+    def generateSquareAttri(maze: set["Cell"], row: int, col: int) -> list["Transit"]:
         mazeInTransit = Modeler.generateTransit(maze)
         result = []
 
@@ -56,8 +60,10 @@ class Modeler:
 
             if cellInTransit[1].coordinate == (0, 0):
                 cellInTransit[1].role = Role.ENTRANCE
-            elif cellInTransit[0].coordinate == (3, 3):
+                cellInTransit[1].border = cellInTransit[1].border & ~Border.SOUTH
+            elif cellInTransit[0].coordinate == (row - 1, col - 1):
                 cellInTransit[1].role = Role.EXIT
+                cellInTransit[1].border = cellInTransit[1].border & ~Border.NORTH
 
             Modeler.updateBorders(cellInTransit, mazeInTransit)
             result.append(cellInTransit[1])
@@ -68,12 +74,22 @@ class Modeler:
     def generateSquares(squareAttri: list["Transit"], rows: int) -> list["Square"]:
         return sorted([Square(cell.generateIndex(rows), cell.reverseCoordinates(rows), cell.border, cell.role) for cell in squareAttri], key = lambda s: s.coordinate)
     
+    @staticmethod
+    def generate(row: int, col: int, path: pathlib.Path):
+        maze = Generator.generateMaze(row, col)
+        inTransit = Modeler.generateSquareAttri(maze, row, col)
+        squares = Modeler.generateSquares(inTransit, row)
+
+        maze = Maze(tuple(squares))
+
+        dump(maze, path)
+
+        renderer = SVGRenderer()
+        renderer.render(maze).preview()
+
+
 if __name__ == "__main__":
-    maze = Generator.generateMaze(4, 4)
-    inTransit = Modeler.generateSquareAttri(maze)
-    squares = Modeler.generateSquares(inTransit, 4)
+    currentDirectory = os.getcwd()
+    filePath = currentDirectory + "\\static\\random(8x8).maze"
 
-    maze = Maze(tuple(squares))
-
-    renderer = SVGRenderer()
-    renderer.render(maze).preview()
+    Modeler.generate(8, 8, pathlib.Path(filePath))

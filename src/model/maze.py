@@ -12,8 +12,8 @@ class Maze:
     def __post_init__(self):
         self.validateIndices()
         self.validateRowsCols()
-        # self.validateEntrance()
-        # self.validateExit()
+        self.validateEntrance()
+        self.validateExit()
 
     # Enable usage of for or while loop
     def __iter__(self) -> Iterator[Square]:

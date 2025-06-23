@@ -101,10 +101,6 @@ class Generator:
             # Add the path to the maze
             [Generator.updateMaze(cell, maze, unvisited) for cell in path]
 
-            for cell in path:
-                print(cell.coordinate, end=" -> ")
-            print("None")
-
             # Reset the path
             path = []
     
