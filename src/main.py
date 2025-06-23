@@ -6,7 +6,7 @@ from .view.renderer import SVGRenderer
 from .persistence.serializer import load
 
 if __name__ == "__main__":
-    MAZETOSOLVE = "random(6x6).maze"
+    MAZETOSOLVE = "random(8x8).maze"
 
     currentDirectory = os.getcwd()
     filePath = currentDirectory + "\\static\\" + MAZETOSOLVE
