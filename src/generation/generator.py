@@ -105,6 +105,3 @@ class Generator:
             path = []
     
         return maze
-
-if __name__ == "__main__":
-    Generator.generateMaze(4, 4)

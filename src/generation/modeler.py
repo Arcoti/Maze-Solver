@@ -89,7 +89,10 @@ class Modeler:
 
 
 if __name__ == "__main__":
-    currentDirectory = os.getcwd()
-    filePath = currentDirectory + "\\static\\random(8x8).maze"
+    ROW = 8
+    COL = 8
 
-    Modeler.generate(8, 8, pathlib.Path(filePath))
+    currentDirectory = os.getcwd()
+    filePath = currentDirectory + f"\\static\\random({ROW}x{COL}).maze"
+
+    Modeler.generate(ROW, COL, pathlib.Path(filePath))
