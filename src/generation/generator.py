@@ -26,10 +26,10 @@ class Generator:
         diff = (current.coordinate[0] - next.coordinate[0], current.coordinate[1] - next.coordinate[1])
 
         match = {
-            (0, 1): Direction.NORTH,
-            (0, -1): Direction.SOUTH,
-            (1, 0): Direction.EAST,
-            (-1, 0): Direction.WEST
+            (0, 1): Direction.WEST,
+            (0, -1): Direction.EAST,
+            (1, 0): Direction.SOUTH,
+            (-1, 0): Direction.NORTH
         }
 
         current.direction = match[diff]
@@ -101,10 +101,14 @@ class Generator:
             # Add the path to the maze
             [Generator.updateMaze(cell, maze, unvisited) for cell in path]
 
+            for cell in path:
+                print(cell.coordinate, end=" -> ")
+            print("None")
+
             # Reset the path
             path = []
     
         return maze
-    
+
 if __name__ == "__main__":
     Generator.generateMaze(4, 4)
