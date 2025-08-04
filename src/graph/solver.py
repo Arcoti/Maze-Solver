@@ -34,29 +34,37 @@ class Solver():
     @classmethod
     def getDestination(cls, cord: tuple[int, int], vertices: set[Vertex]):
         return next(vertex for vertex in vertices if vertex.coordinate == cord)
-
+    
     @classmethod
-    def solve(cls, entrance: Vertex, exits: set[Vertex], vertices, edges):
-        # Initialize distance travelling from itself to itself
+    def reconstructPath(cls, node: Vertex):
+        path, distance = [], node.dist
+        current = node
+        while current is not None:
+            path.append(current)
+            current = current.prev
+
+        return path[::-1], distance
+    
+    @classmethod
+    def dijkstra(cls, entrance: Vertex, exits: set[Vertex], vertices, edges):
+        # Initialize entrace g value
         entrance.dist = 0
 
-        # Initialize unexplored vertices
-        explored = set([entrance])
-
-        # Initialize empty stack
-        stack = deque()
+        # Initialize explored and visited vertices
+        explored = [entrance]
+        visited = set()
 
         source = entrance
-        while exits.isdisjoint(explored):
-            # Store all the previously visited intersections
-            if source.role != Role.ENTRANCE and source.isIntersection:
-                stack.append(source)
+        while len(explored) != 0:
+            # Obtain the node with the lowest g value and add them to the explored list
+            source = explored.pop(0)
+            visited.add(source)
+
+            if source in exits:
+                return cls.reconstructPath(source)
 
             # Get all the edges whose source or destination is the entrance
             relatedEdges = cls.getEdges(edges, source.coordinate)
-
-            # Store all the possible destinations for this current source
-            places = set()
 
             # Loop through all related edges and find the coordinates they are travelling to
             for relatedEdge in relatedEdges:
@@ -66,50 +74,26 @@ class Solver():
                     travellingTo = relatedEdge.source.coordinate
             
                 # Get the distance
-                distance = relatedEdge.distance
+                distance = relatedEdge.distance + source.dist
 
                 # Get the vertex of the destination base on the coordinates and add it to places
                 destination = cls.getDestination(travellingTo, vertices)
-                places.add(destination)
 
-                # Update destination variables if the total distance is less than destination.dist
-                if source.dist + distance < destination.dist:
-                    destination.dist = source.dist + distance
-                    destination.prev = source
-            
-            # Find the next destination whose distance should be the minimum out of all possible non-visited places
-            destinations = sorted(places, key = lambda d : d.dist)
+                if destination in visited:
+                    continue
 
-            index = 0
-            nextDestination = None
-            while index < len(destinations):
-
-                if destinations[index] not in explored:
-                    nextDestination = destinations[index]
-                    explored.add(nextDestination)
-                    break
-
-                index += 1
-            
-            if nextDestination is None:
-                if len(stack) == 0: # Check if stack is empty
-                    return [], float('inf')
+                if destination not in explored:
+                    explored.append(destination)
+                elif distance >= destination.dist:
+                    continue
                 
-                nextDestination = stack.pop()
+                # Update Vertice details
+                destination.dist = distance
+                destination.prev = source
+            
+            explored = sorted(explored, key = lambda d : d.dist)
 
-            # Update source
-            source = nextDestination
-        
-        # When loop ends, source is now one of the exits
-        path = []
-        current = source
-        while current is not None:
-            path.append(current.node)
-            current = current.prev
-        path = path[::-1]
-        distance = source.dist
-
-        return path, distance
+        return [], 0  
     
     @classmethod
     def findShortestPath(cls, maze: Maze):
@@ -128,7 +112,7 @@ class Solver():
             for vertice in vertices:
                 vertice.reset()
 
-            path, dist = cls.solve(entrance, exits, vertices, edges)
+            path, dist = cls.dijkstra(entrance, exits, vertices, edges)
 
             if dist < shortestDist:
                 shortestPath = path
