@@ -89,8 +89,8 @@ class Modeler:
 
 
 if __name__ == "__main__":
-    ROW = 10
-    COL = 10
+    ROW = 16
+    COL = 16
     
     currentDirectory = os.getcwd()
     filePath = currentDirectory + f"\\static\\random({ROW}x{COL}).maze"
