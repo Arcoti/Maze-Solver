@@ -42,6 +42,6 @@ deactivate
 
 ## Acknowledgements
 
-I would like to express my thanks to the follownig resources:
+I would like to express my thanks to the following resources:
 - [Build a Maze Solver in Python Using Graphs](https://realpython.com/python-maze-solver/)
 - [How Dijkstra's Algorithm Works](https://www.youtube.com/watch?v=EFg3u_E6eHU)
